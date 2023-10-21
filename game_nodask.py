@@ -1,10 +1,8 @@
 import sys
 import numpy as np
 import time
-from line_profiler import LineProfiler
 
 
-@profile
 # Read grid from input file
 def read_input(filename):
     with open(filename) as f:
@@ -77,7 +75,6 @@ def grid_size(inputfile):
     return width, height
 
 
-@profile
 # Creating a function to write the resultant grid in output file
 def save_output(grid, output):
     with open(output, "w") as f:
@@ -94,7 +91,6 @@ def save_output(grid, output):
                     f.write(f"{y} {x}\n")
 
 
-@profile
 # Run the game for specified amount of generation
 def tickrun(input, output, generation):
     grid = read_input(input) 
@@ -128,12 +124,6 @@ def main():
         sys.exit("No number of generations.")
     except ValueError:
         sys.exit("Invalid number of generations.")
-    
-    profiler = LineProfiler()
-    
-    profiler.add_function(read_input)
-    profiler.add_function(save_output)
-    profiler.add_function(tickrun)
     
     # Start CPU and Wall time measurement
     start_time = time.time()
