@@ -3,10 +3,8 @@ import numpy as np
 import dask.array as da
 import time
 from dask.distributed import Client
-from line_profiler import LineProfiler
 
 
-@profile
 # Read grid from input file
 def read_input(filename):
     with open(filename) as f:
@@ -28,7 +26,6 @@ def read_input(filename):
         # Convert the grid into Numpy array
         grid = np.array(grid)
     return grid
-
 
 
 # Create a function that counts alive cells in neighborhood of any arbitraty cell
@@ -80,7 +77,6 @@ def grid_size(inputfile):
     return width, height
 
 
-@profile
 # Creating a function to write the resultant grid in output file
 def save_output(grid, output):
     with open(output, "w") as f:
@@ -97,7 +93,6 @@ def save_output(grid, output):
                     f.write(f"{y} {x}\n")
 
 
-@profile
 # Run the game for specified amount of generation using Dask
 def daskrun(input, output, generations, chunk):
     
@@ -114,8 +109,7 @@ def daskrun(input, output, generations, chunk):
     save_output(grid, output)
     return grid
 
-        
-        
+         
 def main():
     try:
         input = sys.argv[1]
@@ -153,12 +147,6 @@ def main():
         sys.exit("No chunksize.")
     except ValueError:
         sys.exit("Invalid chunksize.")
-        
-    profiler = LineProfiler()
-    
-    profiler.add_function(read_input)
-    profiler.add_function(save_output)
-    profiler.add_function(daskrun)
 
     client = Client()
 
